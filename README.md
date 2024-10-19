@@ -8,4 +8,4 @@ Run code `node server.js`
 
 ![Arduino](https://github.com/DoanCongQui/Web_Sensor/blob/main/img/Arduino.png)
 
-- VD: Data trên là random vs 3 dữ liệu sẽ in ra `data1,data2,data3` đối với số dữ liệu khác hãy chĩnh sữa lại 
+- VD: Data trên là random vs 3 dữ liệu sẽ in ra `data1,data2,data3`.
