@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do lực</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h1>Do cảm biến lực nâng, lực cản và vận tốc trên xe tải</h1>
+            <div id="data">Đang chờ dữ liệu...</div>
+            <button id="start">Tiếp tục</button>
+            <button id="stop">Dừng</button>
+            <button id="save">Save</button>
+        </div>
+
+        <div class="charts">
+            <canvas id="chart1"></canvas>
+            <canvas id="chart2"></canvas>
+            <canvas id="chart3"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        let isReceivingData = true;
+
+        // Create a Chart
+        const ctx1 = document.getElementById('chart1').getContext('2d');
+        const ctx2 = document.getElementById('chart2').getContext('2d');
+        const ctx3 = document.getElementById('chart3').getContext('2d');
+
+        const chart1 = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Cảm biến lực cản',
+                    data: [],
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Time' } },
+                    y: { title: { display: true, text: 'Value' } }
+                }
+            }
+        });
+
+        const chart2 = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Cảm biến lực nâng',
+                    data: [],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Time' } },
+                    y: { title: { display: true, text: 'Value' } }
+                }
+            }
+        });
+
+        const chart3 = new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Vận tốc gió',
+                    data: [],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Time' } },
+                    y: { title: { display: true, text: 'Value' } }
+                }
+            }
+        });
+
+        socket.on('connect', () => {
+            console.log('Đã kết nối với server WebSocket');
+        });
+
+        socket.on('arduinoData', (data) => {
+            if (isReceivingData) {
+                const parsedData = JSON.parse(data);
+                console.log('Nhận dữ liệu từ server:', parsedData);
+                document.getElementById('data').innerText = `
+                    - Cảm biến lực cản: ${parsedData.sensor1} (g)
+
+                    - Cảm biến lực nâng: ${parsedData.sensor2} (g)
+
+                    - Vận tốc gió: ${parsedData.sensor3} (m/s)`;
+
+                <!-- Add data to the chart -->
+                const currentTime = new Date().toLocaleTimeString();
+                chart1.data.labels.push(currentTime);
+                chart1.data.datasets[0].data.push(parsedData.sensor1);
+                chart2.data.labels.push(currentTime);
+                chart2.data.datasets[0].data.push(parsedData.sensor2);
+                chart3.data.labels.push(currentTime);
+                chart3.data.datasets[0].data.push(parsedData.sensor3);
+
+                <!-- Update chart -->
+                chart1.update();
+                chart2.update();
+                chart3.update();
+            }
+        });
+
+        
+        <!-- Click Start & Stop  -->
+        socket.on('disconnect', () => {
+            console.log('Đã ngắt kết nối với server WebSocket');
+        });
+
+        document.getElementById('start').addEventListener('click', () => {
+            isReceivingData = true;
+        });
+
+        document.getElementById('stop').addEventListener('click', () => {
+            isReceivingData = false;
+        });
+    </script>
+
+    <!-- Save Image -->
+     <script>
+        document.getElementById('save').addEventListener('click', function() {
+            const currentTime = new Date().toLocaleTimeString().replace(/:/g, '-');
+
+            const chart1Url = document.getElementById('chart1').toDataURL('image/png');
+            const link1 = document.createElement('a');
+            link1.href = chart1Url;
+            link1.download = `chart1-${currentTime}.png`;
+            link1.click();
+
+            const chart2Url = document.getElementById('chart2').toDataURL('image/png');
+            const link2 = document.createElement('a');
+            link2.href = chart2Url;
+            link2.download = `chart2-${currentTime}.png`;
+            link2.click();
+
+            const chart3Url = document.getElementById('chart3').toDataURL('image/png');
+            const link3 = document.createElement('a');
+            link3.href = chart3Url;
+            link3.download = `chart3-${currentTime}.png`;
+            link3.click();
+        });
+    </script>
+</body>
+</html>

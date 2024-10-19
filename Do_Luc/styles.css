@@ -1,0 +1,85 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Khung anh du lieu */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    height: 90vh;
+}
+
+.controls {
+    width: 40%;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.header {
+    display: flex;
+    justify-content: center;  
+    align-items: center;      
+    height: 100vh;            
+}
+
+h1 {
+    color: #E06C75;
+    font-size: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#data {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+/* Nut nhan */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Edit Chart */
+.charts {
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-start; 
+    align-items: flex-end; 
+    width: 55%; 
+    height: 100%;
+    box-sizing: border-box;
+}
+
+canvas {
+    width: 90%; 
+    height: 30%;     
+    margin-bottom: 10px; 
+}
