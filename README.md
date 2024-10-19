@@ -16,3 +16,9 @@ npm install express@4.19.2 serialport@12.0.0 socket.io@4.7.5
 ![Arduino](https://github.com/DoanCongQui/Web_Sensor/blob/main/img/Arduino.png)
 
 - VD: Data trên là random vs 3 dữ liệu sẽ in ra `data1,data2,data3`.
+
+**Sau khi `http://localhost:3000/`**
+
+![2Sensor](https://github.com/DoanCongQui/Web_Sensor/blob/main/img/2Sensor.png)
+
+![2Sensor](https://github.com/DoanCongQui/Web_Sensor/blob/main/img/3Sensor.png)
